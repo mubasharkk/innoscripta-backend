@@ -50,10 +50,10 @@ return [
 	|--------------------------------------------------------------------------
 	*/
 	'modules' => [
-		'states' => true,
-		'cities' => true,
+		'states' => false,
+		'cities' => false,
 		'timezones' => true,
-		'currencies' => true,
+		'currencies' => false,
 		'languages' => true,
 	],
 	/*

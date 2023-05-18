@@ -2,7 +2,6 @@
 
 namespace App\Dto\News;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 
 class Source implements Arrayable
@@ -43,8 +42,6 @@ class Source implements Arrayable
             'language'    => $this->language,
             'country'     => $this->country,
             'url'         => $this->url,
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
         ];
     }
 }

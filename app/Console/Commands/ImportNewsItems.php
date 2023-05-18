@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Dto\News\Item;
 use App\Models\NewsItem;
-use App\Models\NewsSource;
-use App\Services\DTOs\News\Item;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use jcobhams\NewsApi\NewsApi;
@@ -30,28 +30,28 @@ class ImportNewsItems extends Command
      */
     public function handle()
     {
-        //
+        $this->dataFromNewsApiOrg();
     }
 
     public function dataFromNewsApiOrg()
     {
         $config = config('news-api.news-api-org');
         $newsApi = new NewsApi($config['apiKey']);
-        $data = $newsApi->getSources(
-            $this->option('category'),
-            $this->option('lang'),
-            $this->option('country')
-        );
-        if ($data->status == 'ok' && !empty($data->sources)) {
+        $response = $newsApi->getEverything(null, $this->argument('source'));
+        if ($response->status == 'ok' && !empty($response->articles)) {
             $results = collect();
-            foreach ($data->sources as $item) {
+
+            foreach ($response->articles as $item) {
                 $results->push(
-                    new Item($item->id,
-                        $item->name,
-                        $item->category,
-                        $item->language,
-                        $item->country,
-                        $item->description
+                    new Item(
+                        $item->title,
+                        nl2br($item->description),
+                        $item->source?->id,
+                        nl2br($item->content),
+                        Carbon::createFromFormat(Carbon::ATOM, $item->publishedAt),
+                        $item->author,
+                        $item->url,
+                        $item->urlToImage
                     )
                 );
             }
@@ -62,6 +62,11 @@ class ImportNewsItems extends Command
 
     private function insertData(Collection $collection)
     {
-        NewsItem::insert($collection->toArray());
+        NewsItem::insertOrIgnore(array_map(function ($source) {
+            return array_merge($source, [
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }, $collection->toArray()));
     }
 }

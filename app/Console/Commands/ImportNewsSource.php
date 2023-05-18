@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Dto\News\Source;
 use App\Models\NewsSource;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use jcobhams\NewsApi\NewsApi;
@@ -45,7 +46,8 @@ class ImportNewsSource extends Command
             $results = collect();
             foreach ($data->sources as $item) {
                 $results->push(
-                    new Source($item->id,
+                    new Source(
+                        $item->id,
                         $item->name,
                         $item->category,
                         $item->language,
@@ -62,6 +64,11 @@ class ImportNewsSource extends Command
 
     private function insertData(Collection $collection)
     {
-        NewsSource::insertOrIgnore($collection->toArray());
+        NewsSource::insertOrIgnore(array_map(function ($source) {
+            return array_merge($source, [
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }, $collection->toArray()));
     }
 }
