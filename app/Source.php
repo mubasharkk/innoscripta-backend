@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\DTos;
+namespace App\Dto\News;
 
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -12,14 +12,16 @@ class Source implements Arrayable
     private $language;
     private $description;
     private $country;
+    private $url;
 
     public function __construct(
         string $slug,
         string $name,
         ?string $category = null,
-        ?string $language = 'en',
-        ?string $country = 'us',
-        ?string $description = ''
+        ?string $language = null,
+        ?string $country = null,
+        ?string $description = null,
+        ?string $url = null
     ) {
         $this->slug = $slug;
         $this->name = $name;
@@ -27,6 +29,7 @@ class Source implements Arrayable
         $this->language = $language;
         $this->description = $description;
         $this->country = $country;
+        $this->url = $url;
     }
 
     public function toArray()
@@ -38,6 +41,7 @@ class Source implements Arrayable
             'category'    => $this->category,
             'language'    => $this->language,
             'country'     => $this->country,
+            'url'         => $this->url
         ];
     }
 }
