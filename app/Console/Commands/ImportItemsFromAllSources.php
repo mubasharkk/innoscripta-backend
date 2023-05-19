@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\ImportNewsItemBySource;
 use App\Models\NewsSource;
+use App\Services\Importers\GuardianDataImporter;
 use App\Services\Importers\NewsApiOrgImporter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Queue;
@@ -25,7 +26,8 @@ class ImportItemsFromAllSources extends Command
     protected $description = 'Command description';
 
     private $importers = [
-        NewsApiOrgImporter::ORIGIN
+        NewsApiOrgImporter::ORIGIN,
+        GuardianDataImporter::ORIGIN
     ];
 
     /**

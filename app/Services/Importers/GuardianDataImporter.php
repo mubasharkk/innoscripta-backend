@@ -62,15 +62,17 @@ class GuardianDataImporter implements ApiImporter
         int $page = 1
     ) {
         $data = $this->sendRequest('search', [
-            'sectionId'   => $source,
+            'sectionId'   => str_replace(self::ORIGIN.':', '', $source),
             'show-fields' => 'trailText,thumbnail,short-url,lastModified,body',
-            'show-tags'   => 'contributor'
+            'show-tags'   => 'contributor',
+            'lang'        => $language,
+            'page'        => $page,
+            'page-size'   => 50
         ]);
 
         $results = collect();
         foreach ($data->results as $item) {
-
-            $contributors = array_map(function($tag) {
+            $contributors = array_map(function ($tag) {
                 return $tag->webTitle;
             }, $item->tags);
 
