@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Importers\GuardianDataImporter;
 use App\Services\Importers\NewsApiOrgImporter;
 use Illuminate\Console\Command;
 
@@ -23,6 +24,7 @@ class ImportNewsSource extends Command
 
     private $importers = [
         NewsApiOrgImporter::ORIGIN => NewsApiOrgImporter::class,
+        GuardianDataImporter::ORIGIN => GuardianDataImporter::class,
     ];
 
     /**
