@@ -31,12 +31,14 @@ class ArticleService
             ->paginate();
     }
 
-    public function getAuthors(string $origin, ?string $source): \Illuminate\Support\Collection
+    public function getAuthors(string $origin, ?string $source, ?string $language): \Illuminate\Support\Collection
     {
-        return NewsArticle::select('author')
+        return NewsArticle::select(\DB::raw('DISTINCT author'))
+            ->leftJoin('news_sources', 'news_sources.slug', 'news_articles.source_slug')
             ->where(array_filter([
-                'origin'      => $origin,
-                'source_slug' => $source
+                'news_articles.origin' => $origin,
+                'source_slug'          => $source,
+                'language'             => $language
             ]))
             ->groupBy('author')->get()->map(function ($item) {
                 return $item['author'];

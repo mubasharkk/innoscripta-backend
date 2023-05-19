@@ -12,12 +12,14 @@ class AuthorsController extends Controller
         $request->validate([
             'origin'   => 'required|string|exists:news_articles,origin',
             'source'   => 'string|exists:news_sources,slug',
+            'locale' => 'string|exists:news_sources,language',
         ]);
 
         return [
             'data' => $service->getAuthors(
                 $request->get('origin'),
-                $request->get('source')
+                $request->get('source'),
+                $request->get('locale')
             )
         ];
     }
