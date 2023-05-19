@@ -16,7 +16,7 @@ class ImportNewsItems extends Command
      *
      * @var string
      */
-    protected $signature = 'import:news-items {source} {domains=?}';
+    protected $signature = 'import:news-items {source} {--domain=} {--page=1} {--language=}';
 
     /**
      * The console command description.
@@ -35,9 +35,24 @@ class ImportNewsItems extends Command
 
     public function dataFromNewsApiOrg()
     {
+        $source = $this->argument('source');
+        $page = $this->option('page');
+        $this->info("Importing articles from newsapi.org API for source `{$source}`.");
+
         $config = config('news-api.news-api-org');
         $newsApi = new NewsApi($config['apiKey']);
-        $response = $newsApi->getEverything(null, $this->argument('source'));
+        $response = $newsApi->getEverything(
+            null,
+            $source,
+            $this->option('domain'),
+            null,
+            null,
+            null,
+            $this->option('language') ??  null,
+            'publishedAt',
+            null,
+            $page
+        );
         if ($response->status == 'ok' && !empty($response->articles)) {
             $results = collect();
 

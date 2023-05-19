@@ -35,6 +35,7 @@ class ImportNewsSource extends Command
 
     public function dataFromNewsApiOrg()
     {
+        $this->info("Importing all sources from newsapi.org API.");
         $config = config('news-api.news-api-org');
         $newsApi = new NewsApi($config['apiKey']);
         $data = $newsApi->getSources(
