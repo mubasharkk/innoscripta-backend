@@ -10,8 +10,9 @@ trait i18n
     public function locale(Language $lang): array
     {
         return [
-            'code' => $lang->code,
-            'name' => $lang->name,
+            'code'        => $lang->code,
+            'name'        => $lang->name,
+            'name_native' => $lang->name_native,
         ];
     }
 

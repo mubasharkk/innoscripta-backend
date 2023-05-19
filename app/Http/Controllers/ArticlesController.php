@@ -22,6 +22,7 @@ class ArticlesController extends Controller
     public function index(Request $request)
     {
         $request->validate([
+            'origin'   => 'required|string|exists:news_sources,origin',
             'page'     => 'int',
             'fields'   => 'string',
             'locale'   => 'string|size:2|in:en,de',
@@ -33,6 +34,7 @@ class ArticlesController extends Controller
 
         return ArticleResource::collection(
             $this->service->get(
+                $request->get('origin'),
                 $request->get('source'),
                 $request->get('locale', 'en'),
                 $request->get('category'),
@@ -53,6 +55,5 @@ class ArticlesController extends Controller
         } else {
             throw new ModelNotFoundException("Article `$id` not found.");
         }
-
     }
 }

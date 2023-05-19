@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\NewsArticle;
+use App\Models\NewsSource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -14,6 +15,7 @@ class ArticleService
     }
 
     public function get(
+        string $origin,
         ?string $source = null,
         ?string $language = null,
         ?string $category = null,
@@ -23,9 +25,10 @@ class ArticleService
             ->select('news_articles.*', 'news_sources.language', 'news_sources.country')
             ->leftJoin('news_sources', 'news_sources.slug', 'news_articles.source_slug')
             ->where(array_filter([
-                'language'    => $language,
-                'source_slug' => $source,
-                'category'    => $category
+                'news_articles.origin' => $origin,
+                'language'             => $language,
+                'source_slug'          => $source,
+                'category'             => $category
             ]))
             ->orderBy('published_at', 'DESC')
             ->paginate();
@@ -43,5 +46,14 @@ class ArticleService
             ->groupBy('author')->get()->map(function ($item) {
                 return $item['author'];
             });
+    }
+
+    public function getSources(string $origin, string $language, string $country)
+    {
+        return NewsSource::where([
+            'origin'   => $origin,
+            'language' => $language,
+            'country'  => $country,
+        ])->get();
     }
 }
