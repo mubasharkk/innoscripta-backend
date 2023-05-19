@@ -4,7 +4,7 @@ namespace App\Services\Importers;
 
 use App\Dto\News\Item;
 use App\Dto\News\Source;
-use App\Models\NewsItem;
+use App\Models\NewsArticle;
 use App\Models\NewsSource;
 use Carbon\Carbon;
 use jcobhams\NewsApi\NewsApi;
@@ -84,7 +84,7 @@ class NewsApiOrgImporter implements ApiImporter
                 );
             }
 
-            $this->insertData(new NewsItem, $results);
+            $this->insertData(new NewsArticle, $results);
         }
     }
 }

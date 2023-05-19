@@ -23,11 +23,13 @@ class ArticlesController extends Controller
         $data = $request->validate([
             'page'   => 'int',
             'fields' => 'string',
-            'locale' => 'string|size:2|in:en,de'
+            'locale' => 'string|size:2|in:en,de',
+            'source' => 'string|exists:news_sources,slug',
         ]);
 
         return ArticleResource::collection(
             $this->service->get(
+                $data['source'] ?? null,
                 $data['locale'] ?? 'en',
                 $data['page'] ?? 25
             )

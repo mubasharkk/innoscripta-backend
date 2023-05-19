@@ -4,7 +4,7 @@ namespace App\Services\Importers;
 
 use App\Dto\News\Item;
 use App\Dto\News\Source;
-use App\Models\NewsItem;
+use App\Models\NewsArticle;
 use App\Models\NewsSource;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -91,7 +91,7 @@ class GuardianDataImporter implements ApiImporter
             );
         }
 
-        $this->insertData(new NewsItem, $results);
+        $this->insertData(new NewsArticle, $results);
     }
 
     private function sectionId(string $id): string
