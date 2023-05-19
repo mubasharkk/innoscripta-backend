@@ -33,7 +33,7 @@ class GuardianDataImporter implements ApiImporter
         return \json_decode($response->getBody()->getContents())->response;
     }
 
-    public function fetchAndSaveSources(?string $category, ?string $langauge, ?string $country)
+    public function fetchAndSaveSources(?string $category, ?string $language, ?string $country)
     {
         $data = $this->sendRequest('sections');
         $results = collect();
@@ -44,7 +44,7 @@ class GuardianDataImporter implements ApiImporter
                     $this->sectionId($item->id),
                     $item->webTitle,
                     null,
-                    $langauge ?? 'en',
+                    $language ?? 'en',
                     $country ?? 'us',
                     null,
                     $item->webUrl

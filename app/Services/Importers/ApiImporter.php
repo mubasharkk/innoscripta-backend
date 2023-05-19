@@ -4,7 +4,7 @@ namespace App\Services\Importers;
 
 interface ApiImporter
 {
-    public function fetchAndSaveSources(?string $category, ?string $langauge, ?string $country);
+    public function fetchAndSaveSources(?string $category, ?string $language, ?string $country);
 
     public function fetchAndSaveNewsItems(
         string $source,

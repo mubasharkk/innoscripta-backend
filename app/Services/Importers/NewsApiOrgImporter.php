@@ -26,10 +26,10 @@ class NewsApiOrgImporter implements ApiImporter
 
     public function fetchAndSaveSources(
         ?string $category = null,
-        ?string $langauge = null,
+        ?string $language = null,
         ?string $country = null
     ) {
-        $response = $this->api->getSources($category, $langauge, $country);
+        $response = $this->api->getSources($category, $language, $country);
         if ($response->status == 'ok' && !empty($response->sources)) {
             $results = collect();
             foreach ($response->sources as $item) {
@@ -72,7 +72,7 @@ class NewsApiOrgImporter implements ApiImporter
                 $results->push(
                     new Item(
                         self::ORIGIN,
-                        $item->title,
+                        $item->title ?? '',
                         nl2br($item->description),
                         $item->source?->id,
                         nl2br($item->content),
