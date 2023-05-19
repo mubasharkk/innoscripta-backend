@@ -21,14 +21,14 @@ class ArticlesController extends Controller
     public function index(Request $request)
     {
         $data = $request->validate([
-            'page' => 'int',
+            'page'   => 'int',
             'fields' => 'string',
-            'locale' => 'required|in:en,de'
+            'locale' => 'string|size:2|in:en,de'
         ]);
 
         return ArticleResource::collection(
             $this->service->get(
-                $data['locale'],
+                $data['locale'] ?? 'en',
                 $data['page'] ?? 25
             )
         );
@@ -45,9 +45,11 @@ class ArticlesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        return new ArticleResource(
+            $this->service->findById($id)
+        );
     }
 
     /**
