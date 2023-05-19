@@ -23,7 +23,7 @@ class ImportNewsItems extends Command
      *
      * @var string
      */
-    protected $description = 'Import news items and articles';
+    protected $description = 'Import news items and articles for a particular source';
 
     /**
      * Execute the console command.
