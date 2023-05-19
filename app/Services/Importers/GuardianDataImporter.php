@@ -86,7 +86,7 @@ class GuardianDataImporter implements ApiImporter
                     Carbon::createFromFormat(Carbon::ATOM, $item->fields->lastModified),
                     implode(' & ', $contributors),
                     $item->fields->shortUrl,
-                    $item->fields->thumbnail
+                    $item->fields->thumbnail ?? null
                 )
             );
         }
