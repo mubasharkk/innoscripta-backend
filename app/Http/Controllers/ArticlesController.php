@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ArticleResource;
 use App\Services\ArticleService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -43,11 +44,15 @@ class ArticlesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id, Request $request)
+    public function show($id, Request $request)
     {
         $request->merge(['fields' => 'body']);
-        return new ArticleResource(
-            $this->service->findById($id)
-        );
+
+        if ($article = $this->service->findById($id)) {
+            return new ArticleResource($article);
+        } else {
+            throw new ModelNotFoundException("Article `$id` not found.");
+        }
+
     }
 }

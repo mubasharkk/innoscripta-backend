@@ -19,5 +19,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::apiResources([
-    'articles' => \App\Http\Controllers\ArticlesController::class
+    'articles' => \App\Http\Controllers\ArticlesController::class,
+    'authors'  => \App\Http\Controllers\AuthorsController::class
 ]);
