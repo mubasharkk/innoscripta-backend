@@ -15,8 +15,10 @@ class Item implements Arrayable
     private $imageUrl;
     private $sourceSlug;
     private Carbon $publishedAt;
+    private string $origin;
 
     public function __construct(
+        string $origin,
         string $title,
         string $description,
         string $sourceSlug,
@@ -26,6 +28,7 @@ class Item implements Arrayable
         ?string $url = null,
         ?string $imageUrl = null
     ) {
+        $this->origin = $origin;
         $this->title = $title;
         $this->description = $description;
         $this->sourceSlug = $sourceSlug;
@@ -39,6 +42,7 @@ class Item implements Arrayable
     public function toArray()
     {
         return [
+            'origin'       => $this->origin,
             'title'       => $this->title,
             'description' => $this->description ?? '',
             'content'     => $this->content ?? '',

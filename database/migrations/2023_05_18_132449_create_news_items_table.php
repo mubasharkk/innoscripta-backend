@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('news_items', function (Blueprint $table) {
             $table->id();
+            $table->string('origin');
             $table->string('source_slug');
             $table->string('title');
             $table->text('description');

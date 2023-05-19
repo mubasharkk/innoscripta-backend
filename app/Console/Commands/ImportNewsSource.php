@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Dto\News\Source;
-use App\Models\NewsSource;
-use Carbon\Carbon;
+use App\Services\Importers\NewsApiOrgImporter;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use jcobhams\NewsApi\NewsApi;
 
 class ImportNewsSource extends Command
 {
@@ -36,40 +32,11 @@ class ImportNewsSource extends Command
     public function dataFromNewsApiOrg()
     {
         $this->info("Importing all sources from newsapi.org API.");
-        $config = config('news-api.news-api-org');
-        $newsApi = new NewsApi($config['apiKey']);
-        $data = $newsApi->getSources(
+
+        (new NewsApiOrgImporter())->fetchAndSaveSources(
             $this->option('category'),
             $this->option('lang'),
             $this->option('country')
         );
-        if ($data->status == 'ok' && !empty($data->sources)) {
-            $results = collect();
-            foreach ($data->sources as $item) {
-                $results->push(
-                    new Source(
-                        $item->id,
-                        $item->name,
-                        $item->category,
-                        $item->language,
-                        $item->country,
-                        $item->description,
-                        $item->url
-                    )
-                );
-            }
-
-            $this->insertData($results);
-        }
-    }
-
-    private function insertData(Collection $collection)
-    {
-        NewsSource::insertOrIgnore(array_map(function ($source) {
-            return array_merge($source, [
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        }, $collection->toArray()));
     }
 }
