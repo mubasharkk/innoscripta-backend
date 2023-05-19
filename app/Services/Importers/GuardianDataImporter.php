@@ -2,10 +2,12 @@
 
 namespace App\Services\Importers;
 
+use App\Dto\News\Item;
 use App\Dto\News\Source;
+use App\Models\NewsItem;
 use App\Models\NewsSource;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Illuminate\Http\Response;
 
 class GuardianDataImporter implements ApiImporter
 {
@@ -23,34 +25,34 @@ class GuardianDataImporter implements ApiImporter
 
     private function sendRequest(string $uri, array $params = [])
     {
-        return $this->client->get($uri, [
+        $response = $this->client->get($uri, [
             'query' => array_merge(['api-key' => $this->config['apiKey']], $params),
         ]);
+
+        // addition response handling can be added here
+        return \json_decode($response->getBody()->getContents())->response;
     }
 
     public function fetchAndSaveSources(?string $category, ?string $langauge, ?string $country)
     {
-        $response = $this->sendRequest('sections');
-        if ($response->getStatusCode() == Response::HTTP_OK) {
-            $data = \json_decode($response->getBody()->getContents())->response;
-            $results = collect();
-            foreach ($data->results as $item) {
-                $results->push(
-                    new Source(
-                        self::ORIGIN,
-                        self::ORIGIN.":".$item->id,
-                        $item->webTitle,
-                        null,
-                        $langauge ?? 'en',
-                        $country ?? 'us',
-                        null,
-                        $item->webUrl
-                    )
-                );
-            }
-
-            $this->insertData(new NewsSource, $results);
+        $data = $this->sendRequest('sections');
+        $results = collect();
+        foreach ($data->results as $item) {
+            $results->push(
+                new Source(
+                    self::ORIGIN,
+                    $this->sectionId($item->id),
+                    $item->webTitle,
+                    null,
+                    $langauge ?? 'en',
+                    $country ?? 'us',
+                    null,
+                    $item->webUrl
+                )
+            );
         }
+
+        $this->insertData(new NewsSource, $results);
     }
 
     public function fetchAndSaveNewsItems(
@@ -59,6 +61,39 @@ class GuardianDataImporter implements ApiImporter
         ?string $language = 'en',
         int $page = 1
     ) {
+        $data = $this->sendRequest('search', [
+            'sectionId'   => $source,
+            'show-fields' => 'trailText,thumbnail,short-url,lastModified,body',
+            'show-tags'   => 'contributor'
+        ]);
 
+        $results = collect();
+        foreach ($data->results as $item) {
+
+            $contributors = array_map(function($tag) {
+                return $tag->webTitle;
+            }, $item->tags);
+
+            $results->push(
+                new Item(
+                    self::ORIGIN,
+                    $item->webTitle,
+                    $item->fields->trailText,
+                    $this->sectionId($item->sectionId),
+                    $item->fields->body,
+                    Carbon::createFromFormat(Carbon::ATOM, $item->fields->lastModified),
+                    implode(' & ', $contributors),
+                    $item->fields->shortUrl,
+                    $item->fields->thumbnail
+                )
+            );
+        }
+
+        $this->insertData(new NewsItem, $results);
+    }
+
+    private function sectionId(string $id): string
+    {
+        return self::ORIGIN.":".$id;
     }
 }
