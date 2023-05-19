@@ -15,13 +15,15 @@ class ImportNewsItemBySource implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private string $source;
+    private string $origin;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(string $source)
+    public function __construct(string $origin, string $source)
     {
         $this->source = $source;
+        $this->origin = $origin;
     }
 
     /**
@@ -29,6 +31,6 @@ class ImportNewsItemBySource implements ShouldQueue
      */
     public function handle(): void
     {
-        Artisan::call("import:news-items {$this->source}");
+        Artisan::call("import:news-items {$this->origin} {$this->source}");
     }
 }

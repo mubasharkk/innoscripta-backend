@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\ImportNewsItemBySource;
 use App\Models\NewsSource;
+use App\Services\Importers\NewsApiOrgImporter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Queue;
 
@@ -14,7 +15,7 @@ class ImportItemsFromAllSources extends Command
      *
      * @var string
      */
-    protected $signature = 'import:news-items-from-sources';
+    protected $signature = 'import:news-items-from-sources {origin}';
 
     /**
      * The console command description.
@@ -23,15 +24,25 @@ class ImportItemsFromAllSources extends Command
      */
     protected $description = 'Command description';
 
+    private $importers = [
+        NewsApiOrgImporter::ORIGIN
+    ];
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $sources = NewsSource::all();
+        $origin = $this->argument('origin');
+        if (!in_array($origin, $this->importers)) {
+            $this->error("No importer found for origin `{$origin}`.");
+            $origin = $this->choice('Which origin you want to import sources from?', $this->importers);
+        }
+
+        $sources = NewsSource::where(['origin' => $origin])->get();
         foreach ($sources as $source) {
-            Queue::push(new ImportNewsItemBySource($source->slug), [], 'source-news-item');
-            $this->info("Job create to import items for `{$source->slug}` source from news-api.org");
+            Queue::push(new ImportNewsItemBySource($origin, $source->slug), [], 'source-news-item');
+            $this->info("Job create to import items for `{$source->slug}` source from {$origin}");
         }
     }
 }

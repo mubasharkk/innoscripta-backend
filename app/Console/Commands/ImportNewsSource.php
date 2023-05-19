@@ -12,7 +12,7 @@ class ImportNewsSource extends Command
      *
      * @var string
      */
-    protected $signature = 'import:news-sources {--category=} {--lang=en} {--country=us}';
+    protected $signature = 'import:news-sources {origin} {--category=} {--lang=en} {--country=us}';
 
     /**
      * The console command description.
@@ -21,19 +21,27 @@ class ImportNewsSource extends Command
      */
     protected $description = 'Import news sources';
 
+    private $importers = [
+        NewsApiOrgImporter::ORIGIN => NewsApiOrgImporter::class,
+    ];
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->dataFromNewsApiOrg();
-    }
+        $origin = $this->argument('origin');
+        if (!in_array($origin, $this->importers)) {
+            $this->error("No importer found for origin `{$origin}`.");
+            $origin = $this->choice(
+                'Which origin you want to import sources from?',
+                $this->importers
+            );
+        }
 
-    public function dataFromNewsApiOrg()
-    {
-        $this->info("Importing all sources from newsapi.org API.");
+        $this->info("Importing all sources from  API.");
 
-        (new NewsApiOrgImporter())->fetchAndSaveSources(
+        (new $this->importers[$origin])->fetchAndSaveSources(
             $this->option('category'),
             $this->option('lang'),
             $this->option('country')

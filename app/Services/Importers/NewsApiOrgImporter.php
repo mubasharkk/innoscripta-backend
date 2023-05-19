@@ -2,7 +2,11 @@
 
 namespace App\Services\Importers;
 
+use App\Dto\News\Item;
 use App\Dto\News\Source;
+use App\Models\NewsItem;
+use App\Models\NewsSource;
+use Carbon\Carbon;
 use jcobhams\NewsApi\NewsApi;
 
 class NewsApiOrgImporter implements ApiImporter
@@ -43,7 +47,44 @@ class NewsApiOrgImporter implements ApiImporter
                 );
             }
 
-            $this->insertData($results);
+            $this->insertData(new NewsSource, $results);
+        }
+    }
+
+    public function fetchAndSaveNewsItems(string $source, ?string $domain = null, ?string $language = 'en', int $page = 1)
+    {
+        $response = $this->api->getEverything(
+            null,
+            $source,
+            $domain,
+            null,
+            null,
+            null,
+            $language,
+            'publishedAt',
+            null,
+            $page
+        );
+
+        if ($response->status == 'ok' && !empty($response->articles)) {
+            $results = collect();
+            foreach ($response->articles as $item) {
+                $results->push(
+                    new Item(
+                        self::ORIGIN,
+                        $item->title,
+                        nl2br($item->description),
+                        $item->source?->id,
+                        nl2br($item->content),
+                        Carbon::createFromFormat(Carbon::ATOM, $item->publishedAt),
+                        $item->author,
+                        $item->url,
+                        $item->urlToImage
+                    )
+                );
+            }
+
+            $this->insertData(new NewsItem, $results);
         }
     }
 }
