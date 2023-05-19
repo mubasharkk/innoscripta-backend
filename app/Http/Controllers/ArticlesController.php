@@ -20,18 +20,22 @@ class ArticlesController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $request->validate([
-            'page'   => 'int',
-            'fields' => 'string',
-            'locale' => 'string|size:2|in:en,de',
-            'source' => 'string|exists:news_sources,slug',
+        $request->validate([
+            'page'     => 'int',
+            'fields'   => 'string',
+            'locale'   => 'string|size:2|in:en,de',
+            'source'   => 'string|exists:news_sources,slug',
+            'category' => 'string|exists:news_sources,category',
+            'author'   => 'string|exists:news_articles,author',
+            'keyword'  => 'string',
         ]);
 
         return ArticleResource::collection(
             $this->service->get(
-                $data['source'] ?? null,
-                $data['locale'] ?? 'en',
-                $data['page'] ?? 25
+                $request->get('source'),
+                $request->get('locale', 'en'),
+                $request->get('category'),
+                $request->get('page', 25)
             )
         );
     }
