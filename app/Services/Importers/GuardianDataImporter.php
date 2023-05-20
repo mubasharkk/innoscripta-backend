@@ -79,6 +79,7 @@ class GuardianDataImporter implements ApiImporter
             $results->push(
                 new Item(
                     self::ORIGIN,
+                    $item->id,
                     $item->webTitle,
                     $item->fields->trailText,
                     $this->sectionId($item->sectionId),

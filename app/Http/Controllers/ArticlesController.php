@@ -22,7 +22,7 @@ class ArticlesController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'origin'   => 'required|string|exists:news_sources,origin',
+            'origin'   => 'string|exists:news_sources,origin',
             'page'     => 'int',
             'fields'   => 'string',
             'locale'   => 'string|size:2|in:en,de',

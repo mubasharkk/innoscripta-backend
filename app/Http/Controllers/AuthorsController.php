@@ -10,7 +10,7 @@ class AuthorsController extends Controller
     public function index(ArticleService $service, Request $request)
     {
         $request->validate([
-            'origin'   => 'required|string|exists:news_articles,origin',
+            'origin'   => 'string|exists:news_articles,origin',
             'source'   => 'string|exists:news_sources,slug',
             'locale' => 'string|exists:news_sources,language',
         ]);

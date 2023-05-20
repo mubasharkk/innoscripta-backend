@@ -16,9 +16,11 @@ class Item implements Arrayable
     private $sourceSlug;
     private Carbon $publishedAt;
     private string $origin;
+    private string $originId;
 
     public function __construct(
         string $origin,
+        string $originId,
         string $title,
         string $description,
         string $sourceSlug,
@@ -29,6 +31,7 @@ class Item implements Arrayable
         ?string $imageUrl = null
     ) {
         $this->origin = $origin;
+        $this->originId = $originId;
         $this->title = $title;
         $this->description = $description;
         $this->sourceSlug = $sourceSlug;
@@ -43,13 +46,14 @@ class Item implements Arrayable
     {
         return [
             'origin'       => $this->origin,
-            'title'       => $this->title,
-            'description' => $this->description ?? '',
-            'content'     => $this->content ?? '',
-            'source_slug' => $this->sourceSlug,
-            'author'      => $this->author ?? '',
-            'url'         => $this->url ?? '',
-            'image_url'   => $this->imageUrl ?? '',
+            'origin_id'    => $this->originId,
+            'title'        => $this->title,
+            'description'  => $this->description ?? '',
+            'content'      => $this->content ?? '',
+            'source_slug'  => $this->sourceSlug,
+            'author'       => $this->author ?? '',
+            'url'          => $this->url ?? '',
+            'image_url'    => $this->imageUrl ?? '',
             'published_at' => $this->publishedAt
         ];
     }

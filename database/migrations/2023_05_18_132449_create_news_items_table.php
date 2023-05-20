@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('news_articles', function (Blueprint $table) {
             $table->id();
             $table->string('origin');
+            $table->string('origin_id');
             $table->string('source_slug');
             $table->string('title');
             $table->text('description');
@@ -25,6 +26,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('source_slug')->references('slug')->on('news_sources');
+
+            $table->unique(['origin','origin_id']);
         });
     }
 

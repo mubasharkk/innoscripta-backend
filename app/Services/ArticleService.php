@@ -15,7 +15,7 @@ class ArticleService
     }
 
     public function get(
-        string $origin,
+        ?string $origin,
         ?string $source = null,
         ?string $language = null,
         ?string $category = null,
@@ -34,7 +34,7 @@ class ArticleService
             ->paginate();
     }
 
-    public function getAuthors(string $origin, ?string $source, ?string $language): \Illuminate\Support\Collection
+    public function getAuthors(?string $origin, ?string $source, ?string $language): \Illuminate\Support\Collection
     {
         return NewsArticle::select(\DB::raw('DISTINCT author'))
             ->leftJoin('news_sources', 'news_sources.slug', 'news_articles.source_slug')
