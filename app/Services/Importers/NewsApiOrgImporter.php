@@ -8,6 +8,7 @@ use App\Models\NewsArticle;
 use App\Models\NewsSource;
 use Carbon\Carbon;
 use jcobhams\NewsApi\NewsApi;
+use Ramsey\Uuid\Uuid;
 
 class NewsApiOrgImporter implements ApiImporter
 {
@@ -72,6 +73,7 @@ class NewsApiOrgImporter implements ApiImporter
                 $results->push(
                     new Item(
                         self::ORIGIN,
+                        Uuid::uuid4(),
                         $item->title ?? '',
                         nl2br($item->description),
                         $item->source?->id,

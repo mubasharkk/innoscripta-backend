@@ -11,9 +11,9 @@ class SourcesController extends Controller
     public function index(Request $request, ArticleService $service)
     {
         $request->validate([
-            'origin'  => 'required|string|exists:news_sources,origin',
-            'country' => 'required|string|exists:news_sources,country|size:2',
-            'locale'  => 'required|string|exists:news_sources,language|size:2',
+            'origin'  => 'string|exists:news_sources,origin',
+            'country' => 'string|exists:news_sources,country|size:2',
+            'locale'  => 'string|exists:news_sources,language|size:2',
         ]);
 
         return SourceResource::collection(
