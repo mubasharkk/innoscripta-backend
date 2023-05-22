@@ -33,7 +33,7 @@ class ImportNewsSource extends Command
     public function handle()
     {
         $origin = $this->argument('origin');
-        if (!in_array($origin, $this->importers)) {
+        if (!array_key_exists($origin, $this->importers)) {
             $this->error("No importer found for origin `{$origin}`.");
             $origin = $this->choice(
                 'Which origin you want to import sources from?',
