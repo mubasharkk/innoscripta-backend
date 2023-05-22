@@ -1,9 +1,12 @@
 ## Details
 
 **Note:** There is much more to the app architecture that be made better 
-but due to time investment it was getting expensive. 
-If there is a need for the more indepth insight we can discuss what possible can be done better. 
+but because of time invested, it was getting expensive. 
+If there is a need for the more in-depth insight we can discuss what possibly can be done better or can be done more.
+This work is just to give an overview about my knowledge area. I know there are lots of simpler features that can be done within the time frame. 
 Eg. There are a lot `\App\Services\ArticleService` class can be made more efficient etc. For the API endpoints security is skipped but can be added.
+
+## Thank You.
 
 #### Folders of interest would be
 * `app/Console/Commands`
