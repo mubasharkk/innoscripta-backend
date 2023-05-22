@@ -49,7 +49,7 @@ https://next-contentlayer.vercel.app
 
 ## Challenge Guidelines
 
-* All the task/challenge guidelines are observer. 
+* All the task/challenge guidelines are observed. 
   * 2 apps frontend / backend.
   * Dockerize container for backend app using laravel/sail.
   * Suitable and simple design is used for the frontend.
