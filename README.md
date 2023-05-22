@@ -77,6 +77,26 @@ $ ./vendor/bin/sail artisan db:seed
 $ ./vendor/bin/sail artisan queue:work --tries=3 --queue=source-news-item
 ```
 
+### Available artisan commands 
+
+**Import news categories from APIs**
+
+```
+$ ./vendor/bin/sail artisan import:news-items {origin} {source} {--domain=} {--page=1} {--language=}
+```
+**Import category news from APIs**
+
+```
+$ ./vendor/bin/sail artisan import:news-sources {origin} {--category=} {--lang=en} {--country=us}
+
+```
+**Queue up jobs for to fetch news articles for each category, per origin**
+
+```
+$ ./vendor/bin/sail artisan import:news-items-from-sources {origin}
+
+```
+
 ### User
 
 * Email: demo@demo.com
