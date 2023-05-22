@@ -1,66 +1,207 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Details
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Note:** There is much more to the app architecture that be made better 
+but due to time investment it was getting expensive. 
+If there is a need for the more indepth insight we can discuss what possible can be done better. 
+Eg. There are a lot `\App\Services\ArticleService` class can be made more efficient etc. For the API endpoints security is skipped but can be added.
 
-## About Laravel
+#### Folders of interest would be
+* `app/Console/Commands`
+* `app/Dto/News`
+* `app/Http/Controllers`
+* `app/Services/Importers`
+* `app/Services`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#### Requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* User authentication and registration: Users should be able to create an account and
+log in to the website to save their preferences and settings.
+  * <span style="color:green">The API is setup for it as it comes with laravel default settings.</span>
+  * <span style="color:red">Unable to finish the frontend implementation of it.</span>
+    
+* Article search and filtering: Users should be able to search for articles by keyword
+   and filter the results by date, category, and source.
+    * <span style="color:green">The API endpoints is working and search for all articles.</span>
+    * <span style="color:green">`category` is renamed as `source` filter, as this is the more aligned name with the `newsapi.org` data/API responses.<span>
+    * <span style="color:green">`source` is renamed as `origin` filter.</span>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Personalized news feed: Users should be able to customize their news feed by
+   selecting their preferred sources, categories, and authors.
+    * <span style="color:red">This implementation is skipped due to the time availiblity.</span>
+* Mobile-responsive design: The website should be optimized for viewing on mobile
+   devices.
+    * <span style="color:green">The design is basic bootstrap and it is responsive.</span>
 
-## Learning Laravel
+# [Frontend](https://github.com/mubasharkk/innoscripta-frontend)
+* The app is very basic and simple displaying the list of articles and having a search filters by `keyword` (title only), `source`, `dates` , `author`
+* Setup is simple
+    * `npm install`
+    * `npm run dev`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Tech Note:**  The react-js frontend is build on using `nextjs` framework. I don't have extensive expertise in `nextjs` so I have to look and reuse/modify some code from other sources available online.
+The app has very basic setup and functionality and there is a lot of refactor special using proper SSR and its components.  
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The backend API data fetching can be added to config file, but currently they are using the domain `http://localhost:8080` and that is recommnded for the backend app.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+A template with Next.js 13 app dir, Contentlayer, Tailwind CSS and dark mode.
 
-## Laravel Sponsors
+https://next-contentlayer.vercel.app
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Challenge Guidelines
 
-### Premium Partners
+* All the task/challenge guidelines are observer. 
+  * 2 apps frontend / backend.
+  * Dockerize container for backend app using laravel/sail.
+  * Suitable and simple design is used for the frontend.
+  * Only 2 data sources are used to import articles. 
+    * [newsapi.org](https://newsapi.org/)
+    * [The Guardian](https://open-platform.theguardian.com/documentation/)
+## Basic setup
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Running docker
 
-## Contributing
+```
+$ composer install
+$ ./vendor/bin/sail up -d 
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### DB Import
 
-## Code of Conduct
+To setup the app with initialized data. 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+$ ./vendor/bin/sail artisan db:seed
 
-## Security Vulnerabilities
+# Run queue worker after setting up to fetch articles
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+$ ./vendor/bin/sail artisan queue:work --tries=3 --queue=source-news-item
+```
 
-## License
+### User
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* Email: demo@demo.com
+* Password: demo123
+
+## Endpoints
+
+### Articles
+
+```http
+GET /api/articles
+```
+
+Get list of all articles sorted by `published_at` field.
+
+| Parameter  | Type     | Default | Description                                |
+|:-----------|:---------|:--------|:-------------------------------------------|
+| `origin`   | `string` | `null`  | Origin API of news imported.               |
+| `locale`   | `string` | `en`    | ['de', 'en']                               |
+| `source`   | `string` | `null`  | Source/category of the article             |
+| `author`   | `string` | `null`  | Name of the author                         |
+| `keyword`  | `string` | `null`  | Keyword to search title for                |
+| `fromDate` | `string` | `null`  | Articles have published date after         |
+| `tillDate` | `string` | `null`  | Articles have published date before        |
+| `page`     | `int`    | `1`     | Current page number                        |
+
+### Response
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "origin": "the-guardian",
+            "source": {
+                "slug": "the-guardian:australia-news",
+                "title": "Australia news",
+                "description": null,
+                "category": null,
+                "country": {
+                    "code": "US",
+                    "name": "United States"
+                },
+                "language": {
+                    "code": "en",
+                    "name": "English",
+                    "name_native": "English"
+                },
+                "url": "https://www.theguardian.com/australia-news"
+            },
+            "title": "Australia politics live: Chalmers promises action on consultants’ ‘inexcusable’ use of government secrets; BNPL reforms to be announced",
+            "teaser": "Follow live",
+            "author": "Amy Remeikis & Caitlin Cassidy & Stephanie Convery",
+            "publishedAt": "2023-05-21 23:39:50",
+            "url": "https://www.theguardian.com/p/z3aqq",
+            "image": "https://media.guim.co.uk/e22c007422286955b61125a5d138d4eb17ecff49/1004_67_4230_2540/500.jpg"
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 308,
+    }
+}
+``` 
+
+### Sources
+
+```http
+GET /api/sources
+```
+Get list of all news sources
+
+| Parameter | Type     | Default | Description                    |
+|:----------|:---------|:--------|:-------------------------------|
+| `origin`  | `string` | `null`  | Origin API of news imported.   |
+| `locale`  | `string` | `en`    | ['de', 'en']                   |
+| `country` | `string` | `en`    | ['de', 'en']                   |
+| `sources` | `string` | `null`  | Source/category of the article |
+| `page`    | `int`    | `1`     | Current page number            |
+
+### Response
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "origin": "the-guardian",
+            "source": {
+                "slug": "the-guardian:australia-news",
+                "title": "Australia news",
+                "description": null,
+                "category": null,
+                "country": {
+                    "code": "US",
+                    "name": "United States"
+                },
+                "language": {
+                    "code": "en",
+                    "name": "English",
+                    "name_native": "English"
+                },
+                "url": "https://www.theguardian.com/australia-news"
+            },
+            "title": "Australia politics live: Chalmers promises action on consultants’ ‘inexcusable’ use of government secrets; BNPL reforms to be announced",
+            "teaser": "Follow live",
+            "author": "Amy Remeikis & Caitlin Cassidy & Stephanie Convery",
+            "publishedAt": "2023-05-21 23:39:50",
+            "url": "https://www.theguardian.com/p/z3aqq",
+            "image": "https://media.guim.co.uk/e22c007422286955b61125a5d138d4eb17ecff49/1004_67_4230_2540/500.jpg"
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 308
+    }
+}
+``` 
+
+### Running Tests
+
+There are only basic API endpoints status code test added for each endpoint. 
+
+```cmd
+$ ./vendor/bin/sail pest 
+```
